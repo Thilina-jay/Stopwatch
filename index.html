@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beautiful Stopwatch</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+
+    #container {
+      text-align: center;
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #stopwatch {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    #controls {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      margin: 0 10px;
+    }
+
+    #startStop {
+      background-color: #4caf50;
+      color: #fff;
+    }
+
+    #reset {
+      background-color: #f44336;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+<div id="container">
+  <div id="stopwatch">00:00:00<span id="milliseconds">:000</span></div>
+  <div id="controls">
+    <button id="startStop" onclick="startStop()">Start/Stop</button>
+    <button id="reset" onclick="reset()">Reset</button>
+  </div>
+</div>
+
+<script>
+  let timer;
+  let milliseconds = 0;
+  let seconds = 0;
+  let minutes = 0;
+  let hours = 0;
+
+  function startStop() {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    } else {
+      timer = setInterval(updateTime, 10);
+    }
+  }
+
+  function reset() {
+    clearInterval(timer);
+    timer = null;
+    milliseconds = 0;
+    seconds = 0;
+    minutes = 0;
+    hours = 0;
+    updateDisplay();
+  }
+
+  function updateTime() {
+    milliseconds++;
+    if (milliseconds === 100) {
+      milliseconds = 0;
+      seconds++;
+      if (seconds === 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes === 60) {
+          minutes = 0;
+          hours++;
+        }
+      }
+    }
+    updateDisplay();
+  }
+
+  function updateDisplay() {
+    const formattedTime = pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+    const formattedMilliseconds = pad(milliseconds);
+    document.getElementById('stopwatch').innerHTML = `${formattedTime}<span id="milliseconds">:${formattedMilliseconds}</span>`;
+  }
+
+  function pad(value) {
+    return value < 10 ? '0' + value : value;
+  }
+</script>
+
+</body>
+</html>
